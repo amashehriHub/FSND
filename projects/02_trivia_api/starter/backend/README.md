@@ -72,29 +72,109 @@ This README is missing documentation of your endpoints. Below is an example for 
 
 Endpoints
 GET '/categories'
-GET ...
-POST ...
-DELETE ...
+GET '/categories/<int:category_id>/questions'
+GET '/questions'
+POST '/questions'
+DELETE '/questions/<int:question_id>'
+SEARCH '/questions/search'
+POST '/quizzes'
 
+```
 GET '/categories'
-- Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
-- Request Arguments: None
-- Returns: An object with a single key, categories, that contains a object of id: category_string key:value pairs. 
-{'1' : "Science",
-'2' : "Art",
-'3' : "Geography",
-'4' : "History",
-'5' : "Entertainment",
-'6' : "Sports"}
+- Return a list of categories object, success value, total number of categories.
+- Sample: curl http://127.0.0.1:5000/categories
+- Result:
+  "categories": {
+    "1": "Science",
+    "2": "Art",
+    "3": "Geography",
+    "4": "History",
+    "5": "Entertainment",
+    "6": "Sports"
+  },
+  "success": true,
+  "total_categoris": 6
+}
 
 ```
+GET '/categories/<int:category_id>/questions'
+- Return a list of questions object, success value, total number of questions and mapped category.
+- Results are paginated in groups of 10. Include a reqeust argument to choose page number, starting from 1.
+- Sample: curl http://127.0.0.1:5000/questions
+- Result:
 
+```
+```
+GET '/questions'
+- Return a list of questions object, success value, total number of questions and mapped category.
+- Results are paginated in groups of 10. Include a reqeust argument to choose page number, starting from 1.
+- Sample: curl http://127.0.0.1:5000/questions
+- Result:
+"questions": [
+    {
+      "answer": "Muhammad Ali",
+      "category": 4,
+      "difficulty": 1,
+      "id": 9,
+      "question": "What boxer's original name is Cassius Clay?"
+    },
+    {
+      "answer": "Apollo 13",
+      "category": 5,
+      "difficulty": 4,
+      "id": 2,
+      "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
+    },
+    {
+      "answer": "Tom Cruise",
+      "category": 5,
+      "difficulty": 4,
+      "id": 4,
+      "question": "What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?"
+    }
+  ],
+  "success": true,
+  "total_questions": 14
+}
 
-## Testing
-To run the tests, run
 ```
-dropdb trivia_test
-createdb trivia_test
-psql trivia_test < trivia.psql
-python test_flaskr.py
+POST '/questions'
+- Create a new question by supplying needed information: question, answer, difficulty and category.
+- Result is a confirmation that questions has been created successfully with return value for success and created question
+- Sample: curl -X POST -H "Content-Type: application/json" -d '{"question":"What is your name?", "answer":"Abdullah Alshehri", "category": "1", "difficulty":"1"}' http://127.0.0.1:5000/questions
+- Result:
+  "created": {
+    "answer": "Abdullah Alshehri",
+    "category": 1,
+    "difficulty": 1,
+    "id": 27,
+    "question": "What is your name?"
+  },
+  "success": true
+}
 ```
+DELETE '/questions/<int:question_id>'
+- Deletes the question of the given ID if it exists. Retrun the id of the deleted question, success value
+Sample: curl -X DELETE http://127.0.0.1:5000/questions/28
+Result:
+  "deleted": 28,
+  "success": true
+}
+```
+SEARCH '/questions/search'
+- Return a list of maching questions with search term. This will return success value, matching questions, total qustions.
+Sample: curl -i -H "Content-Type: application/json" -X POST -d "{"searchTerm":"abdullah"}" 127.0.0.1:5000/questions/search 
+
+```
+POST '/quizzes'
+- Return one random question from a specific category.
+- Result:
+{
+    "answer": "Muhammad Ali",
+    "category": 4,
+    "difficulty": 1,
+    "id": 9,
+    "question": "What boxer's original name is Cassius Clay?"
+},
+  "success": true
+}

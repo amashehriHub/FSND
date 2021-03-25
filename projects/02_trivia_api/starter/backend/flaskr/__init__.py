@@ -47,7 +47,6 @@ def create_app(test_config=None):
     categories_list = {}
     for category in categories:
       categories_list[category.id] = category.type
-    # return category data to view
     return jsonify({
         'success': True,
         'categories': categories_list,
